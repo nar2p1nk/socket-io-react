@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
+import React from "react";
+import {io } from 'socket.io-client';
+
+const socket = io('http://localhost:8080',{
+  withCredentials:true,
+})
+console.log(socket)
 
 function App() {
-  const [socket, setSocket] = useState(null);
 
-  useEffect(() => {
-    setSocket(io('http://127.0.0.1:8000/'))
-  },[])
   return (
-    <p>
-      socket.io rocks!
-    </p>
+    <div>
+      <h1>React</h1>
+    </div>
   );
 }
 
