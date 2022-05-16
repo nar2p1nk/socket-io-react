@@ -7,20 +7,25 @@ const httpServer = createServer(app);
 const io = new Server(httpServer,{
   cors:{
     origin:'http://localhost:3000',
-    credentials:true
+    credentials:true,
+    methods:["GET","POST"],
+    allowedHeaders:["custom-Header"]
   }
 });
 
 //app.get('/',(req,res)=>{
 //  res.sendFile(__dirname + '/index.html')
 //})
-app.use(require('cors'))
 
 
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+  socket.on('chat message', msg=>{
+    console.log(msg);
+  });
 });
+
 
 
 httpServer.listen(8080,()=>{
