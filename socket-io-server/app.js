@@ -1,8 +1,12 @@
 const express = require('express');
 const {createServer } = require('http');
 const {Server } = require('socket.io');
+const cors = require('cors');
 
 const app = express();
+
+app.use(cors());
+
 const httpServer = createServer(app);
 const io = new Server(httpServer,{
   cors:{
@@ -20,9 +24,10 @@ const io = new Server(httpServer,{
 
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log('a user connected:', socket.id);
   socket.on('chat message', msg=>{
-    console.log(msg);
+    console.log(msg.message)
+    socket.broadcast.emit('receive_message',msg)
   });
 });
 
