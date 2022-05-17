@@ -10,46 +10,37 @@ const socket = io('http://localhost:8080',{
 })
  
 function App() {
-//  const [listMessages, setListMessages] = useState([])
-//
-//  const socketSubmit = (event) =>{
-//    var list = listMessages;
-////    const messages = document.getElementById('messages');
-//    const input = document.getElementById('input');
-//
-//    event.preventDefault();
-//     if(input.value){
-//      socket.emit('chat message',input.value);
-//      input.value = "";
-//    };
-//    event.text = event.text.trim();
-//    list = [...listMessages,event]
-////    socket.on("chat message", function(msg){
-////    })
-//
-//    console.log(list);
-//    setListMessages(list)
-//  }
   const [message,setMessage] = useState("");
-  const [chat,setChat] = useState("");
-  const [listMessages,setListMessages] = useState([])
+  const [chat,setChat] = useState([
+    {id:0,msg:'hello'},
+    {id:1,msg:'heya'}
+  ]);
+  const [receivedMessage,setReceivedMessage] = useState("")
   const sendMessage = () =>{
     socket.emit('chat message',{message})
+    var newId = chat.id + 1;
+    var newList = [...chat,{id:newId,msg:message}]
+    setChat(newList)
   }
 
   useEffect(()=>{
     socket.on('receive_message', (data)=>{
-//      setReceivedMessage(data.message)
-      var newList = [...listMessages,data.message];
-      setListMessages(newList)
-      console.log(listMessages)
-    })
-  },[socket])
 
+      setReceivedMessage(data.message)
+
+      console.log(chat,receivedMessage)
+    })
+  },[socket,chat,receivedMessage])
+
+  const renderChat = chat.map((i)=>{
+    return(
+      <li key={i.id}>{i.msg}</li>
+    )
+  })
   return (
     <div className='app'>
       <ul id="messages">
-        {listMessages}
+        {renderChat}
       </ul>
       <form id='form' onSubmit={(e)=>{e.preventDefault()}}>
         <input id="input" autoComplete="off"
