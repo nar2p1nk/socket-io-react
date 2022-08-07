@@ -10,16 +10,15 @@ app.use(cors());
 const httpServer = createServer(app);
 const io = new Server(httpServer,{
   cors:{
-    origin:'http://localhost:3000',
+    origin:'http://192.168.43.32:3000',
     credentials:true,
     methods:["GET","POST"],
     allowedHeaders:["custom-Header"]
   }
 });
-
-//app.get('/',(req,res)=>{
-//  res.sendFile(__dirname + '/index.html')
-//})
+app.get('/',(req,res)=>{
+  res.json({status:200})
+})
 
 
 
